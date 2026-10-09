@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Agent 对话 · Infra 研究室</title><link rel="stylesheet" href="companion.css"></head>
+<body>
+<section id="pair-screen" hidden><div class="pair-card"><div class="logo">i</div><h1>连接你的研究室</h1><p>手机与电脑连接同一 Wi-Fi，在电脑“手机连接”中查看配对码。</p><label>六位配对码<input id="pair-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000"></label><button id="pair-submit" class="dark">连接电脑 →</button><small>连接后可查看记录、聊天和启动研究。电脑端关闭连接即可撤销所有手机访问。</small></div></section>
+<div id="workspace" class="workspace" hidden>
+<aside id="side" class="side">
+ <div class="brand"><span class="logo">i</span><b>Agent 对话</b><small>INFRA / LAB</small></div>
+ <div class="side-actions">
+  <button id="new-chat" class="nav nav-primary"><span class="nav-icon">＋</span><span>新建对话</span><kbd>Ctrl+N</kbd></button>
+  <button id="focus-search" class="nav"><span class="nav-icon">⌕</span><span>搜索</span><kbd>Ctrl+K</kbd></button>
+  <button class="nav companion-tool desktop-only" data-tool="automation"><span class="nav-icon">◷</span><span>自动化</span></button>
+  <button class="nav companion-tool desktop-only" data-tool="plugins"><span class="nav-icon">▦</span><span>插件市场</span></button>
+ </div>
+ <div id="search-panel" hidden><input id="session-search" class="search" placeholder="搜索标题、消息或附加材料" aria-label="搜索对话历史" maxlength="160"><div id="search-summary" class="search-summary" role="status"></div></div>
+ <div class="group-switch"><button id="group-all"># 全部</button><button id="group-project" class="group-active">▱ 项目</button></div>
+ <div class="project-label">项目</div>
+ <div id="project-list"></div>
+ <button class="nav" data-view="records"><span class="nav-icon">▤</span><span>关联研究室</span></button>
+ <button class="nav phone-only" data-view="research"><span class="nav-icon">◈</span><span>开始研究</span></button>
+ <div class="caption">对话</div>
+ <div id="sessions" class="sessions"></div>
+ <div class="side-foot">
+  <button id="model-entry" class="model-entry desktop-only"><span class="nav-icon">⚙</span><span>API 与模型</span><span class="side-chevron">›</span></button>
+  <span id="connection-label">与研究室共用记录</span><button id="refresh">↻ 刷新记录</button>
+ </div>
+</aside>
+<main><header><button id="toggle-side" aria-label="展开导航">☰</button><div class="header-title"><span class="header-folder">▱</span><b id="page-title">新的对话</b><button id="header-more" class="header-more" aria-label="更多选项">•••</button></div><div class="header-tools"><button id="learning-tools-open" class="tool-link">▤ <span>学习工具</span></button><button id="role-open" class="tool-link desktop-only">♙ <span>角色设置</span></button></div></header>
+<section id="conversation" class="view active"><div class="conversation-toolbar"><span id="agent-label">Infra 学习伙伴</span><div><button id="rename-chat">改名</button><button id="delete-chat">删除对话</button><button id="chat-trash">已删除</button><button id="export-chat">导出</button></div></div><div id="messages" class="messages" aria-live="polite"></div><div class="composer-wrap"><div class="composer"><div id="attachment-label" hidden></div><textarea id="message-input" aria-label="对话消息" placeholder="提出一个问题，或一起探索一个项目…" maxlength="12000"></textarea><div class="composer-bottom"><div class="options"><button id="attach-open">＋ 添加材料</button><label><input id="tools-enabled" type="checkbox" checked>只读工具</label><label title="开启后模型可以读取报告与学习进度，内容将发送到已配置模型"><input id="local-enabled" type="checkbox">读取研究室记录</label><label title="开启后资料片段将发送给当前模型"><input id="materials-chat-enabled" type="checkbox">读取资料库</label></div><div class="send-options"><span class="model-picker"><span id="model-label">未配置模型</span><select id="chat-model-choice" aria-label="聊天模型"></select></span><button id="stop-chat" hidden>停止</button><button id="send-chat" class="dark">发送 ↑</button></div></div></div><div class="compose-note"><span id="chat-status">记录保存在电脑 · 关联记录读取默认关闭</span><span>Enter 发送 · Shift+Enter 换行</span></div></div></section>
+<section id="records" class="view"><div class="page-content"><div class="eyebrow">CONNECTED WORKSPACE</div><h1>同一个研究室，<br>接着你的学习往下走。</h1><p class="muted">背景、角色、研究报告和学习进度来自电脑研究室。这里查看不会自动发送给模型；对话中开启“读取研究室记录”后，模型可按需检索。</p><div id="profile-card" class="info-card"></div><h2>研究报告</h2><div id="reports" class="record-list"></div><h2>学习进度 <small>用户自评</small></h2><div id="learning" class="record-list"></div></div></section>
+<section id="research" class="view"><div class="page-content"><div class="eyebrow">RESEARCH ON YOUR COMPUTER</div><h1>从手机开始，<br>在电脑上完成研究。</h1><label>项目或文章链接<input id="research-url" placeholder="https://github.com/owner/repository"></label><label>或粘贴材料<textarea id="research-material" rows="7" maxlength="35000"></textarea></label><label class="checkbox"><input id="research-agent" type="checkbox" checked>同时分析 Agent 学习价值与作者构建路径</label><label>研究模型<select id="research-model-choice" aria-label="研究模型"></select></label><button id="start-research" class="dark">开始研究 →</button><div id="research-running" class="info-card" hidden><span id="research-status"></span><button id="stop-research">停止研究</button><article id="research-output" class="markdown"></article></div><p class="muted">使用电脑已保存的背景和模型配置。研究会继续运行；电脑需保持开机且研究室开启。</p></div></section>
+</main></div>
+<dialog id="detail"><div class="dialog-top"><h2 id="detail-title"></h2><button data-close="detail" aria-label="关闭">×</button></div><article id="detail-body" class="markdown"></article></dialog>
+<dialog id="material-dialog"><div class="dialog-top"><h2>附加材料</h2><button data-close="material-dialog">×</button></div><textarea id="attachment" rows="12" maxlength="35000" aria-label="附加材料"></textarea><button id="attach-save" class="dark">附加到下一条消息</button><button id="attach-remove">移除</button></dialog>
+<dialog id="rename-dialog"><div class="dialog-top"><h2>修改对话名称</h2><button data-close="rename-dialog">×</button></div><input id="rename-title" maxlength="90" aria-label="对话名称"><button id="rename-save" class="dark">保存</button></dialog>
+<dialog id="role-dialog"><div class="dialog-top"><h2>学习伙伴的角色</h2><button data-close="role-dialog">×</button></div><label>名称<input id="role-name" maxlength="60"></label><label>提示词<textarea id="role-prompt" rows="10" maxlength="12000"></textarea></label><p class="muted">与研究室共用角色设置；保存后仅用于新对话。</p><input id="role-file" type="file" accept=".txt,.md,.json" hidden><button id="role-import">导入角色配置</button><button id="role-export">导出提示词</button><button id="role-save" class="dark">保存角色</button></dialog>
+<div id="toast" role="status"></div><dialog id="delete-dialog"><div class="dialog-top"><h2>删除对话</h2><button data-close="delete-dialog">×</button></div><p>将下面的对话移到“已删除”，可恢复。研究报告不受影响。</p><p id="delete-title"></p><button id="delete-confirm" class="dark">确认删除</button></dialog>
+<dialog id="trash-dialog"><div class="dialog-top"><h2>已删除的对话</h2><button data-close="trash-dialog">×</button></div><div id="trash-list"></div></dialog>
+<dialog id="tools-dialog"><div class="dialog-top"><h2>学习工具</h2><button data-close="tools-dialog" aria-label="关闭">×</button></div><div class="learning-tools"><button data-view="records">研究报告与学习进度 <span>在这里查看</span></button><button class="desktop-only" data-workspace="materials">资料库 <span>打开研究室</span></button><button class="desktop-only" data-workspace="notes">笔记 <span>打开研究室</span></button><button class="desktop-only" data-workspace="review">复习 <span>打开研究室</span></button><button class="desktop-only" data-workspace="github">GitHub 学习 <span>打开研究室</span></button></div></dialog>
+<dialog id="plugins-dialog"><div class="dialog-top"><h2>插件市场</h2><button data-close="plugins-dialog" aria-label="关闭">×</button></div><p class="muted">当前支持本地声明包与内置工具；此处只查看已安装插件与工具权限。</p><div id="plugin-list"></div></dialog>
+<dialog id="retry-dialog"><div class="dialog-top"><h2>重新生成回复</h2><button data-close="retry-dialog" aria-label="关闭">×</button></div><p class="muted">会把原问题和附加材料作为新一轮发送，保留已有回复。使用输入区当前选择的模型和权限；确认后会请求模型。</p><blockquote id="retry-question"></blockquote><button id="retry-confirm" class="dark">确认重新生成</button></dialog>
+<script src="format.js"></script><script src="companion.js"></script></body></html>
